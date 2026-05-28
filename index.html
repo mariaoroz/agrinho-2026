@@ -1,0 +1,145 @@
+as décadas.
+</p>
+</div>
+
+<div class="timeline">
+
+<div class="timeline-box">
+<h3>1960</h3>
+<p>Agricultura tradicional com pouca automação.</p>
+</div>
+
+<div class="timeline-box">
+<h3>2000</h3>
+<p>Expansão de máquinas modernas no campo.</p>
+</div>
+
+<div class="timeline-box">
+<h3>2020</h3>
+<p>Uso de drones, sensores e agricultura de precisão.</p>
+</div>
+
+<div class="timeline-box">
+<h3>2030</h3>
+<p>Futuro sustentável com IA e energia limpa.</p>
+</div>
+
+</div>
+
+</section>
+
+<section class="video fade">
+
+<div class="title">
+<h2>Agro do Futuro</h2>
+<p>
+Veja como tecnologia e sustentabilidade transformam o campo.
+</p>
+</div>
+
+<iframe src="https://www.youtube.com/embed/rvscYV-hFso" allowfullscreen></iframe>
+
+</section>
+
+<section class="fade">
+
+<div class="quiz">
+
+<h2>Quiz de Sustentabilidade</h2>
+<p>
+Qual tecnologia ajuda a reduzir desperdício de água?
+</p>
+
+<button class="btn" onclick="mostrarResposta()">Ver Resposta</button>
+
+<p id="resposta" style="margin-top:20px;font-weight:600;"></p>
+
+</div>
+
+</section>
+
+<section id="contato" class="fade">
+
+<div class="title">
+<h2>Contato</h2>
+<p>
+Compartilhe ideias sobre inovação e sustentabilidade.
+</p>
+</div>
+
+<form>
+
+<label>Nome</label>
+<input type="text" placeholder="Digite seu nome">
+
+<label>Email</label>
+<input type="email" placeholder="Digite seu email">
+
+<label>Mensagem</label>
+<textarea rows="6" placeholder="Digite sua mensagem"></textarea>
+
+<button type="submit" class="btn">Enviar</button>
+
+</form>
+
+</section>
+
+<footer>
+
+<div class="footer-grid">
+
+<div>
+<h3>AGRINHO 2026</h3>
+<p>Projeto educativo sobre sustentabilidade no agronegócio.</p>
+</div>
+
+<div>
+<h3>Navegação</h3>
+<a href="#producao">Produção</a>
+<a href="#tecnologia">Tecnologia</a>
+<a href="#sustentabilidade">Sustentabilidade</a>
+</div>
+
+<div>
+<h3>Contato</h3>
+<p>Brasil</p>
+<p>agrinho@email.com</p>
+</div>
+
+</div>
+
+<div class="copy">
+© 2026 AgroVision 2030 - Todos os direitos reservados
+</div>
+
+</footer>
+
+<script>
+
+function mostrarResposta(){
+
+ document.getElementById('resposta').innerHTML =
+ 'A irrigação inteligente ajuda a economizar água no campo.';
+
+}
+
+const observer = new IntersectionObserver((entries)=>{
+
+entries.forEach((entry)=>{
+
+if(entry.isIntersecting){
+entry.target.classList.add('show');
+}
+
+});
+
+});
+
+ document.querySelectorAll('.fade').forEach((el)=>{
+ observer.observe(el);
+ });
+
+</script>
+
+</body>
+</html>
