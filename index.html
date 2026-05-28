@@ -1,4 +1,489 @@
-as décadas.
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgroVision 2030</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:'Montserrat',sans-serif;
+    background:#07111f;
+    color:#e5e7eb;
+    overflow-x:hidden;
+}
+
+header{
+    height:100vh;
+    background:
+    linear-gradient(rgba(5,10,20,0.75),rgba(5,10,20,0.75)),
+    url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1600&auto=format&fit=crop');
+
+    background-size:cover;
+    background-position:center;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:20px;
+}
+
+.hero h1{
+    font-size:5rem;
+    font-weight:800;
+    color:white;
+    margin-bottom:20px;
+}
+
+.hero h2{
+    font-size:2rem;
+    color:#38bdf8;
+    margin-bottom:25px;
+}
+
+.hero p{
+    max-width:850px;
+    margin:auto;
+    font-size:1.2rem;
+    color:#cbd5e1;
+    margin-bottom:40px;
+}
+
+.btn{
+    display:inline-block;
+    padding:16px 40px;
+    border-radius:50px;
+    text-decoration:none;
+    background:linear-gradient(135deg,#0ea5e9,#2563eb);
+    color:white;
+    font-weight:700;
+    transition:0.4s;
+    box-shadow:0 10px 30px rgba(14,165,233,0.35);
+}
+
+.btn:hover{
+    transform:translateY(-5px) scale(1.03);
+}
+
+nav{
+    position:sticky;
+    top:0;
+    z-index:1000;
+
+    background:rgba(8,15,30,0.9);
+    backdrop-filter:blur(10px);
+
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+
+    padding:20px;
+
+    border-bottom:1px solid rgba(255,255,255,0.08);
+}
+
+nav a{
+    color:#e2e8f0;
+    text-decoration:none;
+    margin:10px 20px;
+    font-weight:600;
+    transition:0.3s;
+}
+
+nav a:hover{
+    color:#38bdf8;
+}
+
+section{
+    padding:100px 10%;
+}
+
+.title{
+    text-align:center;
+    margin-bottom:70px;
+}
+
+.title h2{
+    font-size:3rem;
+    margin-bottom:20px;
+    color:#38bdf8;
+}
+
+.title p{
+    max-width:800px;
+    margin:auto;
+    color:#94a3b8;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:30px;
+}
+
+.card{
+    background:rgba(255,255,255,0.04);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:28px;
+    overflow:hidden;
+    transition:0.4s;
+    backdrop-filter:blur(10px);
+}
+
+.card:hover{
+    transform:translateY(-10px);
+    border-color:#38bdf8;
+    box-shadow:0 15px 35px rgba(56,189,248,0.15);
+}
+
+.card img{
+    width:100%;
+    height:240px;
+    object-fit:cover;
+}
+
+.card-content{
+    padding:30px;
+}
+
+.card-content h3{
+    margin-bottom:15px;
+    color:#38bdf8;
+}
+
+.card-content p{
+    color:#cbd5e1;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:25px;
+    margin-top:60px;
+}
+
+.stat{
+    background:linear-gradient(135deg,#0f172a,#111827);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:25px;
+    text-align:center;
+    padding:45px;
+}
+
+.stat h3{
+    font-size:3.5rem;
+    color:#38bdf8;
+    margin-bottom:15px;
+}
+
+.tech-banner{
+    background:
+    linear-gradient(135deg,#0f172a,#1e3a8a);
+
+    border-radius:35px;
+    padding:80px;
+    text-align:center;
+
+    border:1px solid rgba(255,255,255,0.08);
+}
+
+.tech-banner h2{
+    font-size:3rem;
+    margin-bottom:25px;
+}
+
+.tech-banner p{
+    max-width:850px;
+    margin:auto;
+    margin-bottom:35px;
+    color:#dbeafe;
+}
+
+.video iframe{
+    width:100%;
+    height:550px;
+    border:none;
+    border-radius:25px;
+    box-shadow:0 15px 40px rgba(0,0,0,0.4);
+}
+
+.timeline{
+    display:grid;
+    gap:25px;
+}
+
+.timeline-box{
+    background:rgba(255,255,255,0.03);
+    border-left:5px solid #38bdf8;
+    padding:30px;
+    border-radius:20px;
+}
+
+.timeline-box h3{
+    color:#38bdf8;
+    margin-bottom:10px;
+}
+
+.quiz{
+    margin-top:50px;
+    background:rgba(255,255,255,0.04);
+    border-radius:25px;
+    padding:45px;
+    text-align:center;
+    border:1px solid rgba(255,255,255,0.08);
+}
+
+form{
+    max-width:750px;
+    margin:auto;
+    background:rgba(255,255,255,0.04);
+    border-radius:25px;
+    padding:45px;
+    border:1px solid rgba(255,255,255,0.08);
+}
+
+input, textarea{
+    width:100%;
+    padding:16px;
+    margin-top:10px;
+    margin-bottom:25px;
+    border:none;
+    border-radius:14px;
+    background:#0f172a;
+    color:white;
+}
+
+footer{
+    background:#020617;
+    padding:60px 10%;
+    margin-top:80px;
+    border-top:1px solid rgba(255,255,255,0.08);
+}
+
+.footer-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:40px;
+}
+
+.footer-grid h3{
+    color:#38bdf8;
+    margin-bottom:15px;
+}
+
+.footer-grid p,
+.footer-grid a{
+    color:#94a3b8;
+    text-decoration:none;
+    display:block;
+    margin-bottom:10px;
+}
+
+.copy{
+    margin-top:40px;
+    text-align:center;
+    color:#64748b;
+}
+
+.fade{
+    opacity:0;
+    transform:translateY(40px);
+    transition:1s;
+}
+
+.fade.show{
+    opacity:1;
+    transform:translateY(0);
+}
+
+@media(max-width:900px){
+
+.hero h1{
+    font-size:3rem;
+}
+
+.hero h2{
+    font-size:1.4rem;
+}
+
+.video iframe{
+    height:300px;
+}
+
+.tech-banner{
+    padding:50px 25px;
+}
+
+}
+
+</style>
+</head>
+<body>
+
+<header>
+
+<div class="hero">
+
+<h1>AgroVision 2030</h1>
+
+<h2>Tecnologia Inteligente no Campo</h2>
+
+<p>
+Inovação, inteligência artificial e sustentabilidade criando um novo futuro para o agronegócio brasileiro.
+</p>
+
+<a href="#tecnologia" class="btn">Explorar Tecnologia</a>
+
+</div>
+
+</header>
+
+<nav>
+<a href="#producao">Produção</a>
+<a href="#tecnologia">Tecnologia</a>
+<a href="#sustentabilidade">Sustentabilidade</a>
+<a href="#desafios">Desafios</a>
+<a href="#contato">Contato</a>
+</nav>
+
+<section id="producao" class="fade">
+
+<div class="title">
+<h2>O Agro Move o Brasil</h2>
+<p>
+O agronegócio representa inovação, produtividade e desenvolvimento econômico para milhões de pessoas.
+</p>
+</div>
+
+<div class="grid">
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?q=80&w=1200&auto=format&fit=crop">
+<div class="card-content">
+<h3>Produção Inteligente</h3>
+<p>
+Tecnologias modernas aumentam a eficiência agrícola.
+</p>
+</div>
+</div>
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1509391366360-2e959784a276?q=80&w=1200&auto=format&fit=crop">
+<div class="card-content">
+<h3>Energia Limpa</h3>
+<p>
+Fazendas sustentáveis utilizam energia renovável.
+</p>
+</div>
+</div>
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1492496913980-501348b61469?q=80&w=1200&auto=format&fit=crop">
+<div class="card-content">
+<h3>Preservação Ambiental</h3>
+<p>
+O futuro depende do equilíbrio entre produção e natureza.
+</p>
+</div>
+</div>
+
+</div>
+
+<div class="stats">
+
+<div class="stat">
+<h3>27%</h3>
+<p>Participação do agro no PIB brasileiro.</p>
+</div>
+
+<div class="stat">
+<h3>+70%</h3>
+<p>Crescimento tecnológico no campo.</p>
+</div>
+
+<div class="stat">
+<h3>2030</h3>
+<p>Meta para agricultura sustentável inteligente.</p>
+</div>
+
+</div>
+
+</section>
+
+<section id="tecnologia" class="fade">
+
+<div class="title">
+<h2>Tecnologia no Campo</h2>
+<p>
+A agricultura do futuro será conectada, automatizada e sustentável.
+</p>
+</div>
+
+<div class="grid">
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1523741543316-beb7fc7023d8?q=80&w=1200&auto=format&fit=crop">
+<div class="card-content">
+<h3>Drones Agrícolas</h3>
+<p>Monitoramento inteligente das plantações.</p>
+</div>
+</div>
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop">
+<div class="card-content">
+<h3>Inteligência Artificial</h3>
+<p>IA aplicada à análise do solo e produção.</p>
+</div>
+</div>
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop">
+<div class="card-content">
+<h3>GPS de Precisão</h3>
+<p>Maior produtividade com menos desperdício.</p>
+</div>
+</div>
+
+</div>
+
+</section>
+
+<section id="sustentabilidade" class="fade">
+
+<div class="tech-banner">
+
+<h2>Produzir Sem Destruir</h2>
+
+<p>
+O uso consciente dos recursos naturais é essencial para garantir alimento, desenvolvimento e equilíbrio ambiental.
+</p>
+
+<a href="#desafios" class="btn">Conhecer Desafios</a>
+
+</div>
+
+</section>
+
+<section id="desafios" class="fade">
+
+<div class="title">
+<h2>Evolução da Agricultura</h2>
+<p>
+A tecnologia revolucionou o agronegócio nas últimas décadas.
 </p>
 </div>
 
