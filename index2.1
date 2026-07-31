@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroVision 2030 — Viagem Interativa Pelas Décadas</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #07111f;
+            --card-bg: rgba(255, 255, 255, 0.04);
+            --border: rgba(255, 255, 255, 0.08);
+            --accent: #38bdf8;
+            --accent2: #0ea5e9;
+            --text: #e5e7eb;
+            --subtext: #94a3b8;
+            --hero-overlay: rgba(5, 10, 20, 0.75);
+            --nav-bg: rgba(8, 15, 30, 0.9);
+            --stat-bg: linear-gradient(135deg, #0f172a, #111827);
+            --banner-bg: linear-gradient(135deg, #0f172a, #1e3a8a);
+            --btn-bg: linear-gradient(135deg, #0ea5e9, #2563eb);
+            --font-main: 'Montserrat', sans-serif;
+            --font-mono: 'Space Mono', monospace;
+            --timeline-line: #38bdf8;
+            --glow: rgba(56, 189, 248, 0.35);
+            --transition-speed: 0.4s;
+        }
+
+        body.decade-1970 {
+            --bg: #1a1307;
+            --accent: #f59e0b;
+            --accent2: #d97706;
+            --hero-overlay: rgba(20, 15, 5, 0.8);
+            --nav-bg: rgba(30, 20, 8, 0.9);
+            --stat-bg: linear-gradient(135deg, #2d1f0a, #3a2c10);
+            --banner-bg: linear-gradient(135deg, #3a2c10, #92400e);
+            --btn-bg: linear-gradient(135deg, #f59e0b, #b45309);
+            --timeline-line: #f59e0b;
+            --glow: rgba(245, 158, 11, 0.4);
+            --border: rgba(255, 255, 255, 0.1);
+            --card-bg: rgba(255, 255, 255, 0.06);
+        }
+        body.decade-1980 {
+            --bg: #0d0a1a;
+            --accent: #ec4899;
+            --accent2: #be185d;
+            --hero-overlay: rgba(10, 5, 20, 0.8);
+            --nav-bg: rgba(20, 10, 30, 0.9);
+            --stat-bg: linear-gradient(135deg, #1a0f2e, #2d1040);
+            --banner-bg: linear-gradient(135deg, #2d1040, #831843);
+            --btn-bg: linear-gradient(135deg, #ec4899, #9d174d);
+            --timeline-line: #ec4899;
+            --glow: rgba(236, 72, 153, 0.4);
+            --border: rgba(255, 255, 255, 0.12);
+            --card-bg: rgba(255, 255, 255, 0.06);
+        }
+        body.decade-1990 {
+            --bg: #0a1a0a;
+            --accent: #10b981;
+            --accent2: #047857;
+            --hero-overlay: rgba(5, 15, 5, 0.8);
+            --nav-bg: rgba(10, 20, 10, 0.9);
+            --stat-bg: linear-gradient(135deg, #0a2a0a, #0f3a0f);
+            --banner-bg: linear-gradient(135deg, #0f3a0f, #065f46);
+            --btn-bg: linear-gradient(135deg, #10b981, #065f46);
+            --timeline-line: #10b981;
+            --glow: rgba(16, 185, 129, 0.4);
+            --border: rgba(255, 255, 255, 0.1);
+            --card-bg: rgba(255, 255, 255, 0.06);
+        }
+        body.decade-2000 {
+            --bg: #0f172a;
+            --accent: #8b5cf6;
+            --accent2: #6d28d9;
+            --hero-overlay: rgba(5, 10, 25, 0.8);
+            --nav-bg: rgba(15, 20, 35, 0.9);
+            --stat-bg: linear-gradient(135deg, #1e1b4b, #2e1065);
+            --banner-bg: linear-gradient(135deg, #2e1065, #4c1d95);
+            --btn-bg: linear-gradient(135deg, #8b5cf6, #5b21b6);
+            --timeline-line: #8b5cf6;
+            --glow: rgba(139, 92, 246, 0.4);
+            --border: rgba(255, 255, 255, 0.1);
+            --card-bg: rgba(255, 255, 255, 0.05);
+        }
+        body.decade-2030 {
+            --bg: #07111f;
+            --accent: #38bdf8;
+            --accent2: #0ea5e9;
+            --hero-overlay: rgba(5, 10, 20, 0.75);
+            --nav-bg: rgba(8, 15, 30, 0.9);
+            --stat-bg: linear-gradient(135deg, #0f172a, #111827);
+            --banner-bg: linear-gradient(135deg, #0f172a, #1e3a8a);
+            --btn-bg: linear-gradient(135deg, #0ea5e9, #2563eb);
+            --timeline-line: #38bdf8;
+            --glow: rgba(56, 189, 248, 0.35);
+            --border: rgba(255, 255, 255, 0.08);
+            --card-bg: rgba(255, 255, 255, 0.04);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-main);
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            transition: background 0.5s ease, color 0.5s ease;
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+
+        header {
+            height: 100vh;
+            background: linear-gradient(var(--hero-overlay), var(--hero-overlay)),
+                url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1600&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        .particles { position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1; }
+        .particle {
+            position: absolute; background: var(--accent); border-radius: 50%; opacity: 0.3;
+            animation: floatUp 8s infinite ease-in;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0); opacity:0; }
+            10% { opacity:0.6; }
+            90% { opacity:0.1; }
+            100% { transform: translateY(-10vh) scale(1.5); opacity:0; }
+        }
+        .hero { position:relative; z-index:2; animation: fadeInDown 1.2s ease-out; }
+        @keyframes fadeInDown { from { opacity:0; transform:translateY(-40px); } to { opacity:1; transform:translateY(0); } }
+        .hero h1 { font-size:5rem; font-weight:800; color:white; margin-bottom:20px; text-shadow:0 0 30px var(--glow); font-family:var(--font-mono); letter-spacing:-2px; }
+        .hero h2 { font-size:2rem; color:var(--accent); margin-bottom:25px; font-weight:600; min-height:3rem; }
+        .hero p { max-width:850px; margin:auto; font-size:1.2rem; color:#cbd5e1; margin-bottom:40px; }
+        .btn {
+            display:inline-block; padding:16px 40px; border-radius:50px; text-decoration:none;
+            background:var(--btn-bg); color:white; font-weight:700; transition:0.4s;
+            box-shadow:0 10px 30px var(--glow); cursor:pointer; border:none; font-family:var(--font-main); font-size:1rem;
+        }
+        .btn:hover { transform:translateY(-5px) scale(1.03); filter:brightness(1.1); }
+
+        .decade-selector {
+            position:fixed; top:20px; right:20px; z-index:1001; display:flex; gap:8px;
+            background:rgba(0,0,0,0.6); backdrop-filter:blur(12px); padding:8px 12px; border-radius:40px;
+            border:1px solid var(--border); flex-wrap:wrap; justify-content:center;
+        }
+        .decade-dot {
+            width:32px; height:32px; border-radius:50%; cursor:pointer; transition:0.3s;
+            border:2px solid transparent; font-size:0.7rem; font-weight:700; display:flex; align-items:center; justify-content:center;
+            color:white; background:#333; position:relative;
+        }
+        .decade-dot.active { border-color:var(--accent); box-shadow:0 0 15px var(--glow); transform:scale(1.15); }
+        .decade-dot:hover { transform:scale(1.1); border-color:var(--accent); }
+        .decade-dot[data-decade="1970"] { background:#b45309; } .decade-dot[data-decade="1980"] { background:#9d174d; }
+        .decade-dot[data-decade="1990"] { background:#047857; } .decade-dot[data-decade="2000"] { background:#6d28d9; }
+        .decade-dot[data-decade="2030"] { background:#2563eb; }
+        .decade-label { position:absolute; top:-25px; left:50%; transform:translateX(-50%); font-size:0.65rem; white-space:nowrap; color:white; opacity:0; transition:0.3s; pointer-events:none; }
+        .decade-dot:hover .decade-label { opacity:1; top:-28px; }
+
+        nav {
+            position:sticky; top:0; z-index:999; background:var(--nav-bg); backdrop-filter:blur(10px);
+            display:flex; justify-content:center; flex-wrap:wrap; padding:18px; border-bottom:1px solid var(--border);
+        }
+        nav a { color:#e2e8f0; text-decoration:none; margin:8px 18px; font-weight:600; transition:0.3s; position:relative; }
+        nav a::after { content:''; position:absolute; bottom:-4px; left:0; width:0%; height:2px; background:var(--accent); transition:0.3s; }
+        nav a:hover { color:var(--accent); } nav a:hover::after { width:100%; }
+
+        section { padding:100px 10%; }
+        .title { text-align:center; margin-bottom:70px; }
+        .title h2 { font-size:3rem; margin-bottom:20px; color:var(--accent); }
+        .title p { max-width:800px; margin:auto; color:var(--subtext); font-size:1.1rem; }
+        .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:30px; }
+        .card {
+            background:var(--card-bg); border:1px solid var(--border); border-radius:28px; overflow:hidden;
+            transition:0.4s cubic-bezier(0.25,0.46,0.45,0.94); backdrop-filter:blur(10px); cursor:pointer;
+        }
+        .card:hover { transform:translateY(-10px) rotateX(2deg) rotateY(-2deg); border-color:var(--accent); box-shadow:0 20px 40px var(--glow); }
+        .card img { width:100%; height:240px; object-fit:cover; transition:0.5s; }
+        .card:hover img { transform:scale(1.05); }
+        .card-content { padding:30px; }
+        .card-content h3 { margin-bottom:15px; color:var(--accent); }
+        .card-content p { color:#cbd5e1; }
+        .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:25px; margin-top:60px; }
+        .stat {
+            background:var(--stat-bg); border:1px solid var(--border); border-radius:25px; text-align:center; padding:45px; transition:0.4s;
+        }
+        .stat:hover { border-color:var(--accent); box-shadow:0 10px 25px var(--glow); transform:translateY(-5px); }
+        .stat h3 { font-size:3.5rem; color:var(--accent); margin-bottom:15px; font-family:var(--font-mono); }
+        .tech-banner {
+            background:var(--banner-bg); border-radius:35px; padding:80px; text-align:center; border:1px solid var(--border);
+        }
+        .tech-banner h2 { font-size:3rem; margin-bottom:25px; }
+        .tech-banner p { max-width:850px; margin:auto; margin-bottom:35px; color:#dbeafe; }
+
+        .timeline-interactive {
+            display:flex; flex-direction:column; gap:20px; position:relative; padding-left:40px;
+        }
+        .timeline-interactive::before {
+            content:''; position:absolute; left:18px; top:0; bottom:0; width:4px; background:var(--timeline-line);
+            border-radius:2px; box-shadow:0 0 15px var(--glow);
+        }
+        .timeline-item {
+            background:var(--card-bg); border:1px solid var(--border); border-radius:20px; padding:25px 30px;
+            position:relative; transition:0.4s; cursor:pointer; margin-left:20px;
+        }
+        .timeline-item:hover { border-color:var(--accent); box-shadow:0 0 25px var(--glow); transform:translateX(8px); }
+        .timeline-item::before {
+            content:''; position:absolute; left:-38px; top:28px; width:16px; height:16px; background:var(--accent);
+            border-radius:50%; border:3px solid var(--bg); box-shadow:0 0 10px var(--glow);
+        }
+        .timeline-year { font-family:var(--font-mono); font-size:1.8rem; color:var(--accent); font-weight:700; margin-bottom:8px; }
+        .timeline-desc { color:#cbd5e1; }
+
+        /* Comparador Antes/Depois */
+        .compare-container {
+            position:relative; width:100%; max-width:900px; margin:40px auto; border-radius:25px; overflow:hidden;
+            box-shadow:0 15px 35px rgba(0,0,0,0.5); border:1px solid var(--border); cursor:ew-resize;
+        }
+        .compare-before, .compare-after { width:100%; display:block; }
+        .compare-after { position:absolute; top:0; left:0; width:50%; overflow:hidden; }
+        .compare-after img { width:100%; height:auto; display:block; }
+        .compare-slider {
+            position:absolute; top:0; bottom:0; left:50%; width:4px; background:white; box-shadow:0 0 15px var(--glow);
+            cursor:ew-resize; z-index:2; transform:translateX(-50%);
+        }
+        .compare-handle {
+            position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:40px; height:40px;
+            background:white; border-radius:50%; box-shadow:0 0 20px var(--glow); display:flex; align-items:center; justify-content:center;
+            font-size:1.2rem; color:black; cursor:ew-resize; z-index:3;
+        }
+
+        /* Desafio Drag & Drop */
+        .drag-drop-area {
+            display:flex; flex-wrap:wrap; gap:30px; justify-content:center; margin-top:40px;
+        }
+        .drop-zone {
+            background:var(--card-bg); border:2px dashed var(--border); border-radius:20px; padding:25px;
+            min-width:150px; flex:1; text-align:center; transition:0.3s;
+        }
+        .drop-zone h3 { color:var(--accent); margin-bottom:15px; font-size:1.3rem; }
+        .drop-zone.drag-over { border-color:var(--accent); background:rgba(56,189,248,0.1); box-shadow:0 0 20px var(--glow); }
+        .draggable-items { display:flex; flex-wrap:wrap; gap:15px; justify-content:center; margin:20px 0; }
+        .drag-item {
+            background:var(--card-bg); border:1px solid var(--border); border-radius:15px; padding:15px 25px;
+            cursor:grab; font-weight:600; transition:0.3s; user-select:none; color:var(--text);
+        }
+        .drag-item:active { cursor:grabbing; opacity:0.8; }
+        .placed-item { background:var(--accent); color:white; padding:8px 15px; border-radius:10px; margin:5px; display:inline-block; }
+
+        /* Simulador */
+        .simulator { background:var(--card-bg); border:1px solid var(--border); border-radius:25px; padding:40px; text-align:center; max-width:700px; margin:40px auto; }
+        .simulator select, .simulator input { padding:12px; margin:10px; border-radius:10px; border:1px solid var(--border); background:#0f172a; color:white; }
+        .simulator button { margin-top:15px; }
+
+        form { max-width:750px; margin:auto; background:var(--card-bg); border-radius:25px; padding:45px; border:1px solid var(--border); }
+        input, textarea { width:100%; padding:16px; margin-top:10px; margin-bottom:25px; border:1px solid var(--border); border-radius:14px; background:#0f172a; color:white; font-family:var(--font-main); }
+        input:focus, textarea:focus { outline:none; border-color:var(--accent); box-shadow:0 0 15px var(--glow); }
+        footer { background:#020617; padding:60px 10%; margin-top:80px; border-top:1px solid var(--border); }
+        .footer-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:40px; }
+        .footer-grid h3 { color:var(--accent); margin-bottom:15px; }
+        .footer-grid p, .footer-grid a { color:#94a3b8; text-decoration:none; display:block; margin-bottom:10px; }
+        .footer-grid a:hover { color:var(--accent); }
+        .copy { margin-top:40px; text-align:center; color:#64748b; }
+        .back-to-top {
+            position:fixed; bottom:30px; right:30px; width:50px; height:50px; background:var(--btn-bg);
+            border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:1.5rem;
+            cursor:pointer; z-index:1000; opacity:0; transform:translateY(20px); transition:0.4s; box-shadow:0 8px 25px var(--glow); border:none;
+        }
+        .back-to-top.visible { opacity:1; transform:translateY(0); }
+        .fade { opacity:0; transform:translateY(40px); transition:0.8s ease-out; }
+        .fade.show { opacity:1; transform:translateY(0); }
+        @media(max-width:900px) {
+            .hero h1 { font-size:2.8rem; } .hero h2 { font-size:1.3rem; }
+            .compare-container { max-width:95%; }
+            .tech-banner { padding:50px 20px; }
+            .decade-selector { top:auto; bottom:15px; right:15px; }
+        }
+    </style>
+</head>
+<body class="decade-2030">
+
+    <div class="decade-selector">
+        <div class="decade-dot" data-decade="1970">70</div>
+        <div class="decade-dot" data-decade="1980">80</div>
+        <div class="decade-dot" data-decade="1990">90</div>
+        <div class="decade-dot" data-decade="2000">00</div>
+        <div class="decade-dot active" data-decade="2030">30</div>
+    </div>
+
+    <header>
+        <div class="particles" id="particles"></div>
+        <div class="hero">
+            <h1>AgroVision 2030</h1>
+            <h2 id="typing"></h2>
+            <p>Da mecanização dos anos 70 à inteligência artificial de 2030: mergulhe na evolução do campo brasileiro.</p>
+            <a href="#comparador" class="btn">Comparar Décadas</a>
+        </div>
+    </header>
+
+    <nav>
+        <a href="#producao">Produção</a>
+        <a href="#tecnologia">Tecnologia</a>
+        <a href="#comparador">Antes & Depois</a>
+        <a href="#linha-do-tempo">Linha do Tempo</a>
+        <a href="#desafio">Desafio</a>
+        <a href="#simulador">Simulador</a>
+        <a href="#contato">Contato</a>
+    </nav>
+
+    <section id="producao" class="fade">
+        <div class="title"><h2>O Agro Move o Brasil</h2><p>Inovação, produtividade e desenvolvimento para milhões de pessoas.</p></div>
+        <div class="grid">
+            <div class="card"><img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?q=80&w=1200&auto=format&fit=crop"><div class="card-content"><h3>Produção Inteligente</h3><p>Tecnologias modernas aumentam a eficiência agrícola.</p></div></div>
+            <div class="card"><img src="https://images.unsplash.com/photo-1509391366360-2e959784a276?q=80&w=1200&auto=format&fit=crop"><div class="card-content"><h3>Energia Limpa</h3><p>Fazendas sustentáveis utilizam energia renovável.</p></div></div>
+            <div class="card"><img src="https://images.unsplash.com/photo-1492496913980-501348b61469?q=80&w=1200&auto=format&fit=crop"><div class="card-content"><h3>Preservação Ambiental</h3><p>Equilíbrio entre produção e natureza.</p></div></div>
+        </div>
+        <div class="stats">
+            <div class="stat"><h3 class="counter" data-target="27">0</h3><p>Participação no PIB (%)</p></div>
+            <div class="stat"><h3 class="counter" data-target="70">0</h3><p>Crescimento tecnológico (%)</p></div>
+            <div class="stat"><h3 class="counter" data-target="2030">0</h3><p>Meta sustentável</p></div>
+        </div>
+    </section>
+
+    <section id="tecnologia" class="fade">
+        <div class="title"><h2>Tecnologia no Campo</h2><p>Conectividade, drones e IA transformando a agricultura.</p></div>
+        <div class="grid">
+            <div class="card"><img src="https://images.unsplash.com/photo-1523741543316-beb7fc7023d8?q=80&w=1200&auto=format&fit=crop"><div class="card-content"><h3>Drones Agrícolas</h3><p>Monitoramento aéreo inteligente.</p></div></div>
+            <div class="card"><img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop"><div class="card-content"><h3>Inteligência Artificial</h3><p>Análise preditiva do solo e clima.</p></div></div>
+            <div class="card"><img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop"><div class="card-content"><h3>GPS de Precisão</h3><p>Plantio e colheita com exatidão centimétrica.</p></div></div>
+        </div>
+    </section>
+
+    <!-- COMPARADOR ANTES/DEPOIS -->
+    <section id="comparador" class="fade">
+        <div class="title"><h2>Antes & Depois: O Campo em Duas Épocas</h2><p>Arraste o controle para comparar 1970 e 2030.</p></div>
+        <div class="compare-container" id="compareContainer">
+            <img src="https://images.unsplash.com/photo-1571072265152-4c69c7a3d2d4?q=80&w=1200&auto=format&fit=crop" alt="Fazenda antiga" class="compare-before">
+            <div class="compare-after" id="compareAfter">
+                <img src="https://images.unsplash.com/photo-1586771107445-b3e7e0a1e0b5?q=80&w=1200&auto=format&fit=crop" alt="Fazenda moderna com drones">
+            </div>
+            <div class="compare-slider" id="compareSlider"></div>
+            <div class="compare-handle" id="compareHandle">⇔</div>
+        </div>
+    </section>
+
+    <!-- LINHA DO TEMPO -->
+    <section id="linha-do-tempo" class="fade">
+        <div class="title"><h2>Evolução da Agricultura</h2><p>Clique nos marcos para mudar o tema do site.</p></div>
+        <div class="timeline-interactive">
+            <div class="timeline-item" data-year="1970"><div class="timeline-year">1970</div><div class="timeline-desc"><strong>Mecanização:</strong> Tratores substituem a força animal.</div></div>
+            <div class="timeline-item" data-year="1980"><div class="timeline-year">1980</div><div class="timeline-desc"><strong>Revolução Verde:</strong> Sementes melhoradas e fertilizantes.</div></div>
+            <div class="timeline-item" data-year="1990"><div class="timeline-year">1990</div><div class="timeline-desc"><strong>GPS e Precisão:</strong> Primeiras tecnologias de posicionamento.</div></div>
+            <div class="timeline-item" data-year="2000"><div class="timeline-year">2000</div><div class="timeline-desc"><strong>Digitalização:</strong> Internet rural e softwares de gestão.</div></div>
+            <div class="timeline-item" data-year="2010"><div class="timeline-year">2010</div><div class="timeline-desc"><strong>Drones e IoT:</strong> Sensores e imagens aéreas.</div></div>
+            <div class="timeline-item" data-year="2020"><div class="timeline-year">2020</div><div class="timeline-desc"><strong>Inteligência Artificial:</strong> Algoritmos preditivos no campo.</div></div>
+            <div class="timeline-item" data-year="2030"><div class="timeline-year">2030</div><div class="timeline-desc"><strong>Agro 5.0:</strong> Fazendas autônomas e sustentabilidade total.</div></div>
+        </div>
+    </section>
+
+    <!-- DESAFIO DRAG AND DROP -->
+    <section id="desafio" class="fade">
+        <div class="title"><h2>Desafio das Décadas</h2><p>Arraste cada tecnologia para a década correta.</p></div>
+        <div class="draggable-items" id="draggableItems">
+            <div class="drag-item" draggable="true" data-tech="Trator" data-decade="1970">🚜 Trator</div>
+            <div class="drag-item" draggable="true" data-tech="GPS" data-decade="1990">🛰️ GPS</div>
+            <div class="drag-item" draggable="true" data-tech="Drone" data-decade="2010">🛸 Drone</div>
+            <div class="drag-item" draggable="true" data-tech="IA" data-decade="2020">🤖 Inteligência Artificial</div>
+            <div class="drag-item" draggable="true" data-tech="Sementes Melhoradas" data-decade="1980">🌱 Sementes Melhoradas</div>
+            <div class="drag-item" draggable="true" data-tech="Internet Rural" data-decade="2000">💻 Internet Rural</div>
+        </div>
+        <div class="drag-drop-area">
+            <div class="drop-zone" data-decade="1970"><h3>1970</h3><div class="placed-items"></div></div>
+            <div class="drop-zone" data-decade="1980"><h3>1980</h3><div class="placed-items"></div></div>
+            <div class="drop-zone" data-decade="1990"><h3>1990</h3><div class="placed-items"></div></div>
+            <div class="drop-zone" data-decade="2000"><h3>2000</h3><div class="placed-items"></div></div>
+            <div class="drop-zone" data-decade="2010"><h3>2010</h3><div class="placed-items"></div></div>
+            <div class="drop-zone" data-decade="2020"><h3>2020</h3><div class="placed-items"></div></div>
+        </div>
+        <p style="text-align:center; margin-top:20px; color:var(--accent);" id="dragMessage"></p>
+    </section>
+
+    <!-- SIMULADOR DE PRODUTIVIDADE -->
+    <section id="simulador" class="fade">
+        <div class="title"><h2>Simulador de Produtividade</h2><p>Escolha a década e veja o salto na produção de soja (sc/ha).</p></div>
+        <div class="simulator">
+            <label>Década: <select id="simDecade">
+                <option value="1970">1970</option><option value="1980">1980</option><option value="1990">1990</option>
+                <option value="2000">2000</option><option value="2010">2010</option><option value="2020">2020</option>
+                <option value="2030" selected>2030</option>
+            </select></label>
+            <label>Área (ha): <input type="number" id="simArea" value="100" min="1" max="10000"></label>
+            <button class="btn" id="simBtn">Calcular</button>
+            <h3 style="margin-top:25px; color:var(--accent);">Produção estimada: <span id="simResult">--</span> sc</h3>
+            <p style="color:#94a3b8;">*Valores ilustrativos baseados na evolução histórica.</p>
+        </div>
+    </section>
+
+    <section id="sustentabilidade" class="fade">
+        <div class="tech-banner"><h2>Produzir Sem Destruir</h2><p>O futuro do agro depende do equilíbrio entre produtividade e preservação ambiental.</p></div>
+    </section>
+
+    <section id="contato" class="fade">
+        <div class="title"><h2>Fale Conosco</h2><p>Compartilhe suas ideias sobre o agro do futuro.</p></div>
+        <form id="contactForm">
+            <input type="text" placeholder="Seu nome" required>
+            <input type="email" placeholder="Seu e-mail" required>
+            <textarea rows="5" placeholder="Sua mensagem..."></textarea>
+            <button type="submit" class="btn" style="width:100%;">Enviar</button>
+        </form>
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div><h3>AgroVision 2030</h3><p>Tecnologia e sustentabilidade no campo.</p></div>
+            <div><h3>Links</h3><a href="#producao">Produção</a><a href="#tecnologia">Tecnologia</a><a href="#linha-do-tempo">Linha do Tempo</a></div>
+            <div><h3>Contato</h3><p>contato@agrovision2030.com.br</p><p>+55 (11) 99999-9999</p></div>
+        </div>
+        <div class="copy">© 2025 AgroVision 2030.</div>
+    </footer>
+
+    <button class="back-to-top" id="backToTop">↑</button>
+
+    <script>
+        (function() {
+            // ========== SELETOR DE DÉCADA ==========
+            const body = document.body;
+            const decadeDots = document.querySelectorAll('.decade-dot');
+            let currentDecade = '2030';
+            function setDecade(decade) {
+                body.className = body.className.replace(/decade-\d+/g, '');
+                body.classList.add('decade-' + decade);
+                decadeDots.forEach(d => d.classList.remove('active'));
+                const activeDot = document.querySelector(`.decade-dot[data-decade="${decade}"]`);
+                if (activeDot) activeDot.classList.add('active');
+                currentDecade = decade;
+                localStorage.setItem('agrovision-decade', decade);
+            }
+            decadeDots.forEach(dot => dot.addEventListener('click', () => setDecade(dot.dataset.decade)));
+            const savedDecade = localStorage.getItem('agrovision-decade');
+            if (savedDecade) setDecade(savedDecade);
+            else setDecade('2030');
+
+            // Linha do tempo muda década
+            document.querySelectorAll('.timeline-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const year = item.dataset.year;
+                    if (year) { setDecade(year); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+                });
+            });
+
+            // ========== EFEITO DE DIGITAÇÃO ==========
+            const typingElement = document.getElementById('typing');
+            const phrases = [
+                'Tecnologia Inteligente no Campo',
+                'Conectando Passado e Futuro',
+                'Inovação a Cada Década',
+                'Do arado ao algoritmo'
+            ];
+            let phraseIndex = 0, charIndex = 0, isDeleting = false;
+            function typeEffect() {
+                const current = phrases[phraseIndex];
+                if (!isDeleting) {
+                    typingElement.textContent = current.substring(0, charIndex + 1);
+                    charIndex++;
+                    if (charIndex === current.length) { isDeleting = true; setTimeout(typeEffect, 2000); return; }
+                } else {
+                    typingElement.textContent = current.substring(0, charIndex - 1);
+                    charIndex--;
+                    if (charIndex === 0) { isDeleting = false; phraseIndex = (phraseIndex + 1) % phrases.length; }
+                }
+                setTimeout(typeEffect, isDeleting ? 50 : 100);
+            }
+            typeEffect();
+
+            // ========== COMPARADOR DE IMAGENS ==========
+            const container = document.getElementById('compareContainer');
+            const after = document.getElementById('compareAfter');
+            const slider = document.getElementById('compareSlider');
+            const handle = document.getElementById('compareHandle');
+            let dragging = false;
+            function moveSlider(clientX) {
+                const rect = container.getBoundingClientRect();
+                let x = clientX - rect.left;
+                x = Math.max(0, Math.min(x, rect.width));
+                const percent = (x / rect.width) * 100;
+                after.style.width = percent + '%';
+                slider.style.left = percent + '%';
+                handle.style.left = percent + '%';
+            }
+            container.addEventListener('mousedown', (e) => { dragging = true; moveSlider(e.clientX); });
+            window.addEventListener('mouseup', () => dragging = false);
+            window.addEventListener('mousemove', (e) => { if (dragging) moveSlider(e.clientX); });
+            container.addEventListener('touchstart', (e) => { dragging = true; moveSlider(e.touches[0].clientX); });
+            window.addEventListener('touchend', () => dragging = false);
+            window.addEventListener('touchmove', (e) => { if (dragging) moveSlider(e.touches[0].clientX); });
+
+            // ========== DRAG AND DROP ==========
+            const dragItems = document.querySelectorAll('.drag-item');
+            const dropZones = document.querySelectorAll('.drop-zone');
+            const dragMessage = document.getElementById('dragMessage');
+            dragItems.forEach(item => {
+                item.addEventListener('dragstart', e => {
+                    e.dataTransfer.setData('text/plain', JSON.stringify({ tech: item.dataset.tech, decade: item.dataset.decade }));
+                    item.classList.add('dragging');
+                });
+                item.addEventListener('dragend', () => item.classList.remove('dragging'));
+            });
+            dropZones.forEach(zone => {
+                zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+                zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+                zone.addEventListener('drop', e => {
+                    e.preventDefault();
+                    zone.classList.remove('drag-over');
+                    const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+                    if (data.decade === zone.dataset.decade) {
+                        const placed = zone.querySelector('.placed-items');
+                        if (!placed.querySelector(`[data-tech="${data.tech}"]`)) {
+                            const span = document.createElement('span');
+                            span.className = 'placed-item';
+                            span.textContent = data.tech;
+                            span.dataset.tech = data.tech;
+                            placed.appendChild(span);
+                            dragMessage.textContent = '✅ Correto! ' + data.tech + ' pertence a ' + data.decade;
+                            dragMessage.style.color = 'var(--accent)';
+                        } else {
+                            dragMessage.textContent = 'Essa tecnologia já foi colocada aqui.';
+                        }
+                    } else {
+                        dragMessage.textContent = '❌ ' + data.tech + ' não é de ' + zone.dataset.decade + '. Tente novamente.';
+                        dragMessage.style.color = '#ef4444';
+                    }
+                });
+            });
+
+            // ========== SIMULADOR ==========
+            const productivity = {
+                '1970': 20, '1980': 30, '1990': 40, '2000': 50, '2010': 55, '2020': 60, '2030': 75
+            };
+            document.getElementById('simBtn').addEventListener('click', () => {
+                const decade = document.getElementById('simDecade').value;
+                const area = parseFloat(document.getElementById('simArea').value) || 100;
+                const scPerHa = productivity[decade];
+                const total = Math.round(scPerHa * area);
+                document.getElementById('simResult').textContent = total.toLocaleString();
+            });
+
+            // ========== CONTADORES ==========
+            const counters = document.querySelectorAll('.counter');
+            const counterObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const counter = entry.target;
+                        const target = +counter.dataset.target;
+                        const duration = 2000;
+                        const startTime = performance.now();
+                        function update(now) {
+                            const progress = Math.min((now - startTime) / duration, 1);
+                            counter.textContent = Math.floor(progress * target) + (target === 2030 ? '' : '%');
+                            if (progress < 1) requestAnimationFrame(update);
+                            else counter.textContent = target + (target === 2030 ? '' : '%');
+                        }
+                        requestAnimationFrame(update);
+                        counterObserver.unobserve(counter);
+                    }
+                });
+            }, { threshold: 0.6 });
+            counters.forEach(c => counterObserver.observe(c));
+
+            // ========== ANIMAÇÃO FADE ==========
+            const fadeElements = document.querySelectorAll('.fade');
+            const fadeObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('show'); fadeObserver.unobserve(entry.target); } });
+            }, { threshold: 0.2 });
+            fadeElements.forEach(el => fadeObserver.observe(el));
+
+            // ========== BOTÃO VOLTAR AO TOPO ==========
+            const backToTop = document.getElementById('backToTop');
+            window.addEventListener('scroll', () => backToTop.classList.toggle('visible', window.scrollY > 600));
+            backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+            // ========== PARTÍCULAS ==========
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                const size = Math.random() * 8 + 2;
+                p.style.width = size + 'px'; p.style.height = size + 'px';
+                p.style.left = Math.random() * 100 + '%';
+                p.style.animationDelay = Math.random() * 8 + 's';
+                p.style.animationDuration = (Math.random() * 8 + 6) + 's';
+                particlesContainer.appendChild(p);
+            }
+
+            // ========== FORMULÁRIO ==========
+            document.getElementById('contactForm').addEventListener('submit', e => {
+                e.preventDefault();
+                alert('Mensagem enviada com sucesso!');
+                e.target.reset();
+            });
+
+            console.log('🌾 AgroVision 2030 — Experiência interativa além dos quizzes!');
+        })();
+    </script>
+</body>
+</html>
