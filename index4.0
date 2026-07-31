@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroVision 2030 — Viagem Interativa Pelas Décadas</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #07111f;
+            --card-bg: rgba(255, 255, 255, 0.04);
+            --border: rgba(255, 255, 255, 0.08);
+            --accent: #38bdf8;
+            --accent2: #0ea5e9;
+            --text: #e5e7eb;
+            --subtext: #94a3b8;
+            --hero-overlay: rgba(5, 10, 20, 0.75);
+            --nav-bg: rgba(8, 15, 30, 0.85);
+            --stat-bg: linear-gradient(135deg, #0f172a, #111827);
+            --banner-bg: linear-gradient(135deg, #0f172a, #1e3a8a);
+            --btn-bg: linear-gradient(135deg, #0ea5e9, #2563eb);
+            --font-main: 'Montserrat', sans-serif;
+            --font-mono: 'Space Mono', monospace;
+            --timeline-line: #38bdf8;
+            --glow: rgba(56, 189, 248, 0.35);
+            --transition-speed: 0.4s;
+        }
+
+        /* Temas das Décadas */
+        body.decade-1970 {
+            --bg: #1a1307; --accent: #f59e0b; --accent2: #d97706;
+            --hero-overlay: rgba(20, 15, 5, 0.85); --nav-bg: rgba(30, 20, 8, 0.9);
+            --stat-bg: linear-gradient(135deg, #2d1f0a, #3a2c10);
+            --banner-bg: linear-gradient(135deg, #3a2c10, #92400e);
+            --btn-bg: linear-gradient(135deg, #f59e0b, #b45309);
+            --timeline-line: #f59e0b; --glow: rgba(245, 158, 11, 0.4);
+            --border: rgba(255, 255, 255, 0.1); --card-bg: rgba(255, 255, 255, 0.06);
+        }
+        body.decade-1980 {
+            --bg: #0d0a1a; --accent: #ec4899; --accent2: #be185d;
+            --hero-overlay: rgba(10, 5, 20, 0.85); --nav-bg: rgba(20, 10, 30, 0.9);
+            --stat-bg: linear-gradient(135deg, #1a0f2e, #2d1040);
+            --banner-bg: linear-gradient(135deg, #2d1040, #831843);
+            --btn-bg: linear-gradient(135deg, #ec4899, #9d174d);
+            --timeline-line: #ec4899; --glow: rgba(236, 72, 153, 0.4);
+            --border: rgba(255, 255, 255, 0.12); --card-bg: rgba(255, 255, 255, 0.06);
+        }
+        body.decade-1990 {
+            --bg: #0a1a0a; --accent: #10b981; --accent2: #047857;
+            --hero-overlay: rgba(5, 15, 5, 0.85); --nav-bg: rgba(10, 20, 10, 0.9);
+            --stat-bg: linear-gradient(135deg, #0a2a0a, #0f3a0f);
+            --banner-bg: linear-gradient(135deg, #0f3a0f, #065f46);
+            --btn-bg: linear-gradient(135deg, #10b981, #065f46);
+            --timeline-line: #10b981; --glow: rgba(16, 185, 129, 0.4);
+            --border: rgba(255, 255, 255, 0.1); --card-bg: rgba(255, 255, 255, 0.06);
+        }
+        body.decade-2000 {
+            --bg: #0f172a; --accent: #8b5cf6; --accent2: #6d28d9;
+            --hero-overlay: rgba(5, 10, 25, 0.85); --nav-bg: rgba(15, 20, 35, 0.9);
+            --stat-bg: linear-gradient(135deg, #1e1b4b, #2e1065);
+            --banner-bg: linear-gradient(135deg, #2e1065, #4c1d95);
+            --btn-bg: linear-gradient(135deg, #8b5cf6, #5b21b6);
+            --timeline-line: #8b5cf6; --glow: rgba(139, 92, 246, 0.4);
+            --border: rgba(255, 255, 255, 0.1); --card-bg: rgba(255, 255, 255, 0.05);
+        }
+        body.decade-2030 {
+            --bg: #07111f; --accent: #38bdf8; --accent2: #0ea5e9;
+            --hero-overlay: rgba(5, 10, 20, 0.75); --nav-bg: rgba(8, 15, 30, 0.85);
+            --stat-bg: linear-gradient(135deg, #0f172a, #111827);
+            --banner-bg: linear-gradient(135deg, #0f172a, #1e3a8a);
+            --btn-bg: linear-gradient(135deg, #0ea5e9, #2563eb);
+            --timeline-line: #38bdf8; --glow: rgba(56, 189, 248, 0.35);
+            --border: rgba(255, 255, 255, 0.08); --card-bg: rgba(255, 255, 255, 0.04);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        
+        body {
+            font-family: var(--font-main);
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            transition: background 0.6s ease, color 0.6s ease;
+            cursor: default;
+        }
+
+        /* Efeito de Glow que segue o mouse */
+        .mouse-glow {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, var(--glow) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            opacity: 0.4;
+            transition: opacity 0.3s;
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+
+        /* Foco acessível */
+        *:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 4px;
+            border-radius: 4px;
+        }
+
+        header {
+            height: 100vh;
+            background: linear-gradient(var(--hero-overlay), var(--hero-overlay)),
+                url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1600&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: background-image 0.8s ease-in-out;
+        }
+        .particles { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        .particle {
+            position: absolute; background: var(--accent); border-radius: 50%; opacity: 0.3;
+            animation: floatUp 8s infinite ease-in;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.1; }
+            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+        }
+        .hero { position: relative; z-index: 2; animation: fadeInDown 1.2s ease-out; }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 5rem);
+            font-weight: 800; color: white; margin-bottom: 20px;
+            text-shadow: 0 0 30px var(--glow);
+            font-family: var(--font-mono); letter-spacing: -2px;
+        }
+        .hero h2 {
+            font-size: clamp(1.2rem, 3vw, 2rem); color: var(--accent);
+            margin-bottom: 25px; font-weight: 600; min-height: 3rem;
+        }
+        .hero p { max-width: 850px; margin: auto; font-size: 1.2rem; color: #cbd5e1; margin-bottom: 40px; }
+        
+        .btn {
+            display: inline-block; padding: 16px 40px; border-radius: 50px;
+            text-decoration: none; background: var(--btn-bg); color: white;
+            font-weight: 700; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px var(--glow); cursor: pointer; border: none;
+            font-family: var(--font-main); font-size: 1rem; position: relative; overflow: hidden;
+        }
+        .btn:hover { transform: translateY(-3px) scale(1.03); filter: brightness(1.15); box-shadow: 0 15px 40px var(--glow); }
+        .btn:active { transform: translateY(-1px) scale(0.98); }
+
+        .decade-selector {
+            position: fixed; top: 20px; right: 20px; z-index: 1001;
+            display: flex; gap: 8px; background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(12px); padding: 8px 12px; border-radius: 40px;
+            border: 1px solid var(--border); flex-wrap: wrap; justify-content: center;
+        }
+        .decade-dot {
+            width: 36px; height: 36px; border-radius: 50%; cursor: pointer;
+            transition: all 0.3s; border: 2px solid transparent;
+            font-size: 0.75rem; font-weight: 700; display: flex;
+            align-items: center; justify-content: center; color: white;
+            background: #333; position: relative;
+        }
+        .decade-dot.active { border-color: var(--accent); box-shadow: 0 0 15px var(--glow); transform: scale(1.15); }
+        .decade-dot:hover { transform: scale(1.1); border-color: var(--accent); }
+        .decade-dot[data-decade="1970"] { background: #b45309; }
+        .decade-dot[data-decade="1980"] { background: #9d174d; }
+        .decade-dot[data-decade="1990"] { background: #047857; }
+        .decade-dot[data-decade="2000"] { background: #6d28d9; }
+        .decade-dot[data-decade="2030"] { background: #2563eb; }
+        .decade-label {
+            position: absolute; top: -30px; left: 50%; transform: translateX(-50%);
+            font-size: 0.7rem; white-space: nowrap; color: white; opacity: 0;
+            transition: 0.3s; pointer-events: none; background: rgba(0,0,0,0.8);
+            padding: 4px 8px; border-radius: 4px;
+        }
+        .decade-dot:hover .decade-label { opacity: 1; top: -35px; }
+
+        nav {
+            position: sticky; top: 0; z-index: 999; background: var(--nav-bg);
+            backdrop-filter: blur(12px); display: flex; justify-content: center;
+            flex-wrap: wrap; padding: 18px; border-bottom: 1px solid var(--border);
+        }
+        nav a {
+            color: #e2e8f0; text-decoration: none; margin: 8px 18px; font-weight: 600;
+            transition: 0.3s; position: relative; padding: 4px 0;
+        }
+        nav a::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 0%; height: 2px;
+            background: var(--accent); transition: width 0.3s ease;
+        }
+        nav a:hover { color: var(--accent); }
+        nav a:hover::after { width: 100%; }
+
+        section { padding: 100px 10%; position: relative; z-index: 2; }
+        .title { text-align: center; margin-bottom: 70px; }
+        .title h2 { font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 20px; color: var(--accent); }
+        .title p { max-width: 800px; margin: auto; color: var(--subtext); font-size: 1.1rem; }
+        
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+        .card {
+            background: var(--card-bg); border: 1px solid var(--border); border-radius: 28px;
+            overflow: hidden; transition: transform 0.1s ease-out, box-shadow 0.3s ease, border-color 0.3s ease;
+            backdrop-filter: blur(10px); cursor: pointer; transform-style: preserve-3d;
+        }
+        .card:hover { border-color: var(--accent); box-shadow: 0 20px 40px var(--glow); }
+        .card img { width: 100%; height: 240px; object-fit: cover; transition: 0.5s; }
+        .card:hover img { transform: scale(1.05); }
+        .card-content { padding: 30px; transform: translateZ(20px); }
+        .card-content h3 { margin-bottom: 15px; color: var(--accent); }
+        .card-content p { color: #cbd5e1; line-height: 1.6; }
+
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 25px; margin-top: 60px; }
+        .stat {
+            background: var(--stat-bg); border: 1px solid var(--border); border-radius: 25px;
+            text-align: center; padding: 45px; transition: 0.4s;
+        }
+        .stat:hover { border-color: var(--accent); box-shadow: 0 10px 25px var(--glow); transform: translateY(-5px); }
+        .stat h3 { font-size: 3.5rem; color: var(--accent); margin-bottom: 15px; font-family: var(--font-mono); }
+
+        .tech-banner {
+            background: var(--banner-bg); border-radius: 35px; padding: 80px;
+            text-align: center; border: 1px solid var(--border); position: relative; overflow: hidden;
+        }
+        .tech-banner::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 60%);
+            animation: rotateBg 20s linear infinite;
+        }
+        @keyframes rotateBg { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .tech-banner h2 { font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 25px; position: relative; z-index: 1; }
+        .tech-banner p { max-width: 850px; margin: auto; margin-bottom: 35px; color: #dbeafe; position: relative; z-index: 1; }
+
+        .timeline-interactive { display: flex; flex-direction: column; gap: 20px; position: relative; padding-left: 40px; }
+        .timeline-interactive::before {
+            content: ''; position: absolute; left: 18px; top: 0; bottom: 0; width: 4px;
+            background: var(--timeline-line); border-radius: 2px; box-shadow: 0 0 15px var(--glow);
+        }
+        .timeline-item {
+            background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px;
+            padding: 25px 30px; position: relative; transition: 0.4s; cursor: pointer; margin-left: 20px;
+        }
+        .timeline-item:hover { border-color: var(--accent); box-shadow: 0 0 25px var(--glow); transform: translateX(8px); }
+        .timeline-item::before {
+            content: ''; position: absolute; left: -38px; top: 28px; width: 16px; height: 16px;
+            background: var(--accent); border-radius: 50%; border: 3px solid var(--bg);
+            box-shadow: 0 0 10px var(--glow); transition: 0.3s;
+        }
+        .timeline-item:hover::before { transform: scale(1.3); }
+        .timeline-year { font-family: var(--font-mono); font-size: 1.8rem; color: var(--accent); font-weight: 700; margin-bottom: 8px; }
+        .timeline-desc { color: #cbd5e1; line-height: 1.5; }
+
+        /* Quiz Aprimorado */
+        .quiz-container {
+            margin-top: 50px; background: var(--card-bg); border-radius: 25px;
+            padding: 45px; text-align: center; border: 1px solid var(--border);
+            max-width: 800px; margin-left: auto; margin-right: auto;
+        }
+        .quiz-progress-bar {
+            width: 100%; height: 8px; background: rgba(255,255,255,0.1);
+            border-radius: 4px; margin-bottom: 10px; overflow: hidden;
+        }
+        .quiz-progress-fill {
+            height: 100%; background: var(--accent); border-radius: 4px;
+            width: 0%; transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 10px var(--glow);
+        }
+        .quiz-progress-text { font-size: 0.9rem; color: var(--subtext); margin-bottom: 25px; }
+        .quiz-question { font-size: 1.4rem; margin-bottom: 30px; color: white; font-weight: 600; line-height: 1.4; }
+        .quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; max-width: 600px; margin: auto; }
+        .quiz-option {
+            padding: 18px; border-radius: 15px; background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border); cursor: pointer; transition: 0.3s;
+            color: #e2e8f0; font-weight: 500; text-align: left; position: relative; overflow: hidden;
+        }
+        .quiz-option:hover:not(.disabled) { background: rgba(255, 255, 255, 0.1); border-color: var(--accent); transform: translateY(-2px); }
+        .quiz-option.correct { background: #10b981 !important; border-color: #10b981 !important; color: white !important; font-weight: 700; }
+        .quiz-option.wrong { background: #ef4444 !important; border-color: #ef4444 !important; color: white !important; }
+        .quiz-option.disabled { pointer-events: none; opacity: 0.6; }
+        .quiz-feedback { margin-top: 25px; font-weight: 600; min-height: 28px; font-size: 1.1rem; }
+        .quiz-score { font-size: 2.5rem; color: var(--accent); margin: 20px 0; font-family: var(--font-mono); text-shadow: 0 0 20px var(--glow); }
+
+        form {
+            max-width: 750px; margin: auto; background: var(--card-bg); border-radius: 25px;
+            padding: 45px; border: 1px solid var(--border); position: relative;
+        }
+        .form-success {
+            display: none; text-align: center; padding: 40px;
+        }
+        .form-success svg { width: 60px; height: 60px; color: #10b981; margin-bottom: 20px; }
+        .form-success h3 { color: #10b981; margin-bottom: 10px; }
+        
+        input, textarea {
+            width: 100%; padding: 16px; margin-top: 10px; margin-bottom: 25px;
+            border: 1px solid var(--border); border-radius: 14px; background: rgba(15, 23, 42, 0.8);
+            color: white; font-family: var(--font-main); transition: 0.3s;
+        }
+        input:focus, textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 15px var(--glow); background: rgba(15, 23, 42, 1); }
+        
+        footer { background: #020617; padding: 60px 10%; margin-top: 80px; border-top: 1px solid var(--border); position: relative; z-index: 2; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 40px; }
+        .footer-grid h3 { color: var(--accent); margin-bottom: 15px; }
+        .footer-grid p, .footer-grid a { color: #94a3b8; text-decoration: none; display: block; margin-bottom: 10px; transition: 0.3s; }
+        .footer-grid a:hover { color: var(--accent); transform: translateX(5px); }
+        .copy { margin-top: 40px; text-align: center; color: #64748b; }
+        
+        .back-to-top {
+            position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px;
+            background: var(--btn-bg); border-radius: 50%; display: flex; align-items: center;
+            justify-content: center; color: white; font-size: 1.5rem; cursor: pointer;
+            z-index: 1000; opacity: 0; transform: translateY(20px); transition: 0.4s;
+            box-shadow: 0 8px 25px var(--glow); border: none;
+        }
+        .back-to-top.visible { opacity: 1; transform: translateY(0); }
+        .back-to-top:hover { transform: translateY(-3px) scale(1.1); }
+
+        .fade { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+        .fade.show { opacity: 1; transform: translateY(0); }
+
+        @media(max-width:900px) {
+            .hero h1 { font-size: 2.8rem; }
+            .hero h2 { font-size: 1.3rem; }
+            .tech-banner { padding: 50px 20px; }
+            .decade-selector { top: auto; bottom: 20px; right: 50%; transform: translateX(50%); width: max-content; }
+            .quiz-options { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body class="decade-2030">
+
+    <!-- Efeito de brilho que segue o mouse -->
+    <div class="mouse-glow" id="mouseGlow"></div>
+
+    <div class="decade-selector" role="tablist" aria-label="Seletor de Décadas">
+        <div class="decade-dot" data-decade="1970" role="tab" aria-label="Década de 1970" tabindex="0">70</div>
+        <div class="decade-dot" data-decade="1980" role="tab" aria-label="Década de 1980" tabindex="0">80</div>
+        <div class="decade-dot" data-decade="1990" role="tab" aria-label="Década de 1990" tabindex="0">90</div>
+        <div class="decade-dot" data-decade="2000" role="tab" aria-label="Década de 2000" tabindex="0">00</div>
+        <div class="decade-dot active" data-decade="2030" role="tab" aria-label="Década de 2030" tabindex="0">30</div>
+    </div>
+
+    <header id="mainHeader">
+        <div class="particles" id="particles"></div>
+        <div class="hero">
+            <h1 id="heroTitle">AgroVision 2030</h1>
+            <h2 id="typing"></h2>
+            <p id="heroDesc">Da mecanização dos anos 70 à inteligência artificial de 2030: mergulhe na evolução do campo brasileiro.</p>
+            <a href="#quiz" class="btn">Teste seus conhecimentos</a>
+        </div>
+    </header>
+
+    <nav>
+        <a href="#producao">Produção</a>
+        <a href="#tecnologia">Tecnologia</a>
+        <a href="#linha-do-tempo">Linha do Tempo</a>
+        <a href="#quiz">Quiz Agrinho</a>
+        <a href="#contato">Contato</a>
+    </nav>
+
+    <section id="producao" class="fade">
+        <div class="title"><h2>O Agro Move o Brasil</h2><p>Inovação, produtividade e desenvolvimento para milhões de pessoas.</p></div>
+        <div class="grid">
+            <div class="card tilt-card">
+                <img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?q=80&w=1200&auto=format&fit=crop" alt="Produção Inteligente" loading="lazy">
+                <div class="card-content"><h3>Produção Inteligente</h3><p>Tecnologias modernas aumentam a eficiência agrícola com dados em tempo real.</p></div>
+            </div>
+            <div class="card tilt-card">
+                <img src="https://images.unsplash.com/photo-1509391366360-2e959784a276?q=80&w=1200&auto=format&fit=crop" alt="Energia Limpa" loading="lazy">
+                <div class="card-content"><h3>Energia Limpa</h3><p>Fazendas sustentáveis utilizam energia solar e biogás para operar.</p></div>
+            </div>
+            <div class="card tilt-card">
+                <img src="https://images.unsplash.com/photo-1492496913980-501348b61469?q=80&w=1200&auto=format&fit=crop" alt="Preservação Ambiental" loading="lazy">
+                <div class="card-content"><h3>Preservação Ambiental</h3><p>Equilíbrio entre alta produção e conservação dos biomas nacionais.</p></div>
+            </div>
+        </div>
+        <div class="stats">
+            <div class="stat"><h3 class="counter" data-target="27">0</h3><p>Participação no PIB (%)</p></div>
+            <div class="stat"><h3 class="counter" data-target="70">0</h3><p>Crescimento tecnológico (%)</p></div>
+            <div class="stat"><h3 class="counter" data-target="2030">0</h3><p>Meta sustentável</p></div>
+        </div>
+    </section>
+
+    <section id="tecnologia" class="fade">
+        <div class="title"><h2>Tecnologia no Campo</h2><p>Conectividade, drones e IA transformando a agricultura.</p></div>
+        <div class="grid">
+            <div class="card tilt-card">
+                <img src="https://images.unsplash.com/photo-1523741543316-beb7fc7023d8?q=80&w=1200&auto=format&fit=crop" alt="Drones Agrícolas" loading="lazy">
+                <div class="card-content"><h3>Drones Agrícolas</h3><p>Monitoramento aéreo inteligente e aplicação localizada de insumos.</p></div>
+            </div>
+            <div class="card tilt-card">
+                <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop" alt="Inteligência Artificial" loading="lazy">
+                <div class="card-content"><h3>Inteligência Artificial</h3><p>Análise preditiva do solo, clima e detecção de pragas por visão computacional.</p></div>
+            </div>
+            <div class="card tilt-card">
+                <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop" alt="GPS de Precisão" loading="lazy">
+                <div class="card-content"><h3>GPS de Precisão</h3><p>Plantio e colheita com exatidão centimétrica e piloto automático.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="linha-do-tempo" class="fade">
+        <div class="title"><h2>Evolução da Agricultura</h2><p>Clique nos marcos para viajar no tempo e mudar o tema do site.</p></div>
+        <div class="timeline-interactive">
+            <div class="timeline-item" data-year="1970" tabindex="0"><div class="timeline-year">1970</div><div class="timeline-desc"><strong>Mecanização:</strong> Tratores substituem a força animal, iniciando a modernização.</div></div>
+            <div class="timeline-item" data-year="1980" tabindex="0"><div class="timeline-year">1980</div><div class="timeline-desc"><strong>Revolução Verde:</strong> Sementes melhoradas, fertilizantes e defensivos químicos.</div></div>
+            <div class="timeline-item" data-year="1990" tabindex="0"><div class="timeline-year">1990</div><div class="timeline-desc"><strong>GPS e Precisão:</strong> Primeiras tecnologias de posicionamento global no campo.</div></div>
+            <div class="timeline-item" data-year="2000" tabindex="0"><div class="timeline-year">2000</div><div class="timeline-desc"><strong>Digitalização:</strong> Internet rural e softwares de gestão fazendária.</div></div>
+            <div class="timeline-item" data-year="2010" tabindex="0"><div class="timeline-year">2010</div><div class="timeline-desc"><strong>Drones e IoT:</strong> Sensores conectados e imagens aéreas de alta resolução.</div></div>
+            <div class="timeline-item" data-year="2020" tabindex="0"><div class="timeline-year">2020</div><div class="timeline-desc"><strong>Inteligência Artificial:</strong> Algoritmos preditivos e machine learning no campo.</div></div>
+            <div class="timeline-item" data-year="2030" tabindex="0"><div class="timeline-year">2030</div><div class="timeline-desc"><strong>Agro 5.0:</strong> Fazendas autônomas, robótica e sustentabilidade total.</div></div>
+        </div>
+    </section>
+
+    <section id="quiz" class="fade">
+        <div class="title">
+            <h2>🧑‍🌾 Quiz do Agrinho</h2>
+            <p>Teste seus conhecimentos sobre o maior programa de responsabilidade social do SENAR-PR.</p>
+        </div>
+        <div class="quiz-container" id="quizContainer">
+            <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="quizProgressFill"></div></div>
+            <div class="quiz-progress-text" id="quizProgressText">Pergunta 1 de 6</div>
+            <div class="quiz-question" id="quizQuestion"></div>
+            <div class="quiz-options" id="quizOptions"></div>
+            <div class="quiz-feedback" id="quizFeedback"></div>
+            <button class="btn" id="quizNextBtn" style="display:none; margin-top:20px;">Próxima Pergunta</button>
+            <div id="quizResult" style="display:none;"></div>
+        </div>
+    </section>
+
+    <section id="sustentabilidade" class="fade">
+        <div class="tech-banner">
+            <h2>Produzir Sem Destruir</h2>
+            <p>O futuro do agro depende do equilíbrio entre alta produtividade e preservação ambiental. A tecnologia é a ponte para esse equilíbrio.</p>
+            <a href="#contato" class="btn">Saiba Mais</a>
+        </div>
+    </section>
+
+    <section id="contato" class="fade">
+        <div class="title"><h2>Fale Conosco</h2><p>Compartilhe suas ideias sobre o agro do futuro.</p></div>
+        <form id="contactForm">
+            <div id="formContent">
+                <input type="text" placeholder="Seu nome" required aria-label="Seu nome">
+                <input type="email" placeholder="Seu e-mail" required aria-label="Seu e-mail">
+                <textarea rows="5" placeholder="Sua mensagem..." required aria-label="Sua mensagem"></textarea>
+                <button type="submit" class="btn" style="width:100%;">Enviar Mensagem</button>
+            </div>
+            <div class="form-success" id="formSuccess">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <h3>Mensagem Enviada!</h3>
+                <p style="color: var(--subtext);">Obrigado pelo contato. Responderemos em breve.</p>
+                <button type="button" class="btn" id="resetFormBtn" style="margin-top: 20px;">Enviar nova mensagem</button>
+            </div>
+        </form>
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div><h3>AgroVision 2030</h3><p>Tecnologia e sustentabilidade no campo brasileiro.</p></div>
+            <div><h3>Links Rápidos</h3><a href="#producao">Produção</a><a href="#tecnologia">Tecnologia</a><a href="#linha-do-tempo">Linha do Tempo</a></div>
+            <div><h3>Contato</h3><p>contato@agrovision2030.com.br</p><p>+55 (11) 99999-9999</p></div>
+        </div>
+        <div class="copy">© 2026 AgroVision 2030. Todos os direitos reservados.</div>
+    </footer>
+
+    <button class="back-to-top" id="backToTop" aria-label="Voltar ao topo">↑</button>
+
+    <script>
+        (function() {
+            // ========== DADOS DINÂMICOS DAS DÉCADAS ==========
+            const decadeData = {
+                '1970': { title: 'A Era da Mecanização', subtitle: 'O trator chega ao campo', desc: 'Os anos 70 marcaram a substituição da tração animal por máquinas, iniciando a modernização do campo brasileiro.', bg: 'https://images.unsplash.com/photo-1595841696677-6489ff3f8cd1?q=80&w=1600&auto=format&fit=crop' },
+                '1980': { title: 'Revolução Verde', subtitle: 'Sementes e Fertilizantes', desc: 'A década de 80 trouxe o melhoramento genético e o uso intensivo de insumos, explodindo a produtividade.', bg: 'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=1600&auto=format&fit=crop' },
+                '1990': { title: 'Agricultura de Precisão', subtitle: 'A Era do GPS', desc: 'Os anos 90 introduziram o GPS e as primeiras tecnologias de posicionamento para otimizar o plantio.', bg: 'https://images.unsplash.com/photo-1560493676-04071c5f467b?q=80&w=1600&auto=format&fit=crop' },
+                '2000': { title: 'Digitalização Rural', subtitle: 'Conectividade e Gestão', desc: 'A virada do milênio trouxe a internet ao campo e softwares para gestão financeira e operacional.', bg: 'https://images.unsplash.com/photo-1586771107445-d3ca888129ff?q=80&w=1600&auto=format&fit=crop' },
+                '2030': { title: 'AgroVision 2030', subtitle: 'Inteligência e Autonomia', desc: 'Da mecanização dos anos 70 à inteligência artificial de 2030: mergulhe na evolução do campo brasileiro.', bg: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1600&auto=format&fit=crop' }
+            };
+
+            const body = document.body;
+            const decadeDots = document.querySelectorAll('.decade-dot');
+            const heroTitle = document.getElementById('heroTitle');
+            const heroDesc = document.getElementById('heroDesc');
+            const mainHeader = document.getElementById('mainHeader');
+            let currentDecade = '2030';
+
+            function setDecade(decade) {
+                if (!decadeData[decade]) decade = '2030';
+                
+                // Atualiza classe do body para cores
+                body.className = body.className.replace(/decade-\d+/g, '');
+                body.classList.add('decade-' + decade);
+                
+                // Atualiza dots
+                decadeDots.forEach(d => d.classList.remove('active'));
+                const activeDot = document.querySelector(`.decade-dot[data-decade="${decade}"]`);
+                if (activeDot) activeDot.classList.add('active');
+                
+                // Atualiza conteúdo do Hero com transição suave
+                mainHeader.style.opacity = '0.8';
+                setTimeout(() => {
+                    heroTitle.textContent = decadeData[decade].title;
+                    document.getElementById('typing').textContent = ''; // Reset typing
+                    heroDesc.textContent = decadeData[decade].desc;
+                    mainHeader.style.backgroundImage = `linear-gradient(var(--hero-overlay), var(--hero-overlay)), url('${decadeData[decade].bg}')`;
+                    mainHeader.style.opacity = '1';
+                    startTypingEffect(); // Reinicia efeito de digitação
+                }, 300);
+
+                currentDecade = decade;
+                localStorage.setItem('agrovision-decade', decade);
+            }
+
+            decadeDots.forEach(dot => {
+                dot.addEventListener('click', () => setDecade(dot.dataset.decade));
+                dot.addEventListener('keydown', (e) => { if(e.key === 'Enter') setDecade(dot.dataset.decade); });
+            });
+
+            document.querySelectorAll('.timeline-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const year = item.dataset.year;
+                    if (year) { 
+                        setDecade(year);
+                        window.scrollTo({ top: 0, behavior: 'smooth' }); 
+                    }
+                });
+                item.addEventListener('keydown', (e) => {
+                    if(e.key === 'Enter') {
+                        const year = item.dataset.year;
+                        if (year) { setDecade(year); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+                    }
+                });
+            });
+
+            const savedDecade = localStorage.getItem('agrovision-decade');
+            if (savedDecade) setDecade(savedDecade);
+            else setDecade('2030');
+
+            // ========== EFEITO DE DIGITAÇÃO ==========
+            const typingElement = document.getElementById('typing');
+            let phraseIndex = 0, charIndex = 0, isDeleting = false;
+            let typingTimeout;
+
+            function startTypingEffect() {
+                clearTimeout(typingTimeout);
+                phraseIndex = 0; charIndex = 0; isDeleting = false;
+                typeEffect();
+            }
+
+            function typeEffect() {
+                const phrases = [decadeData[currentDecade].subtitle, 'Conectando Passado e Futuro', 'Inovação a Cada Década'];
+                const current = phrases[phraseIndex];
+                
+                if (!isDeleting) {
+                    typingElement.textContent = current.substring(0, charIndex + 1);
+                    charIndex++;
+                    if (charIndex === current.length) { 
+                        isDeleting = true;
+                        typingTimeout = setTimeout(typeEffect, 2000); 
+                        return; 
+                    }
+                } else {
+                    typingElement.textContent = current.substring(0, charIndex - 1);
+                    charIndex--;
+                    if (charIndex === 0) { 
+                        isDeleting = false;
+                        phraseIndex = (phraseIndex + 1) % phrases.length; 
+                    }
+                }
+                typingTimeout = setTimeout(typeEffect, isDeleting ? 40 : 80);
+            }
+            startTypingEffect();
+
+            // ========== QUIZ AGRINHO COM BARRA DE PROGRESSO ==========
+            const quizData = [
+                { question: '1. O que significa a sigla SENAR?', options: ['Serviço Nacional de Aprendizagem Rural', 'Sistema Nacional de Agricultura e Reforma', 'Serviço Nacional de Agricultura Regional', 'Sociedade Nacional de Agronegócio Rural'], correct: 0 },
+                { question: '2. Em que ano foi criado o Programa Agrinho?', options: ['1985', '1990', '1995', '2000'], correct: 2 },
+                { question: '3. Qual é o principal objetivo do Programa Agrinho?', options: ['Vender produtos agrícolas', 'Promover educação, saúde e cidadania no meio rural', 'Desenvolver novos tratores', 'Exportar grãos para outros países'], correct: 1 },
+                { question: '4. Quais temas são abordados pelo Agrinho?', options: ['Apenas matemática e português', 'Moda e entretenimento', 'Meio ambiente, cidadania, saúde, trabalho e consumo', 'Esportes e lazer urbano'], correct: 2 },
+                { question: '5. O Agrinho é destinado principalmente a qual público?', options: ['Empresários do agronegócio', 'Alunos e professores da rede pública de ensino', 'Pecuaristas de grandes fazendas', 'Engenheiros agrônomos'], correct: 1 },
+                { question: '6. Em qual estado brasileiro o Agrinho teve origem?', options: ['São Paulo', 'Minas Gerais', 'Paraná', 'Rio Grande do Sul'], correct: 2 }
+            ];
+
+            let currentQuizIndex = 0, score = 0, quizAnswered = false;
+            const quizQuestion = document.getElementById('quizQuestion');
+            const quizOptions = document.getElementById('quizOptions');
+            const quizFeedback = document.getElementById('quizFeedback');
+            const quizNextBtn = document.getElementById('quizNextBtn');
+            const quizProgressText = document.getElementById('quizProgressText');
+            const quizProgressFill = document.getElementById('quizProgressFill');
+            const quizResult = document.getElementById('quizResult');
+
+            function updateQuizProgress() {
+                const progress = ((currentQuizIndex) / quizData.length) * 100;
+                quizProgressFill.style.width = `${progress}%`;
+                quizProgressText.textContent = `Pergunta ${currentQuizIndex + 1} de ${quizData.length}`;
+            }
+
+            function loadQuizQuestion(index) {
+                if (index >= quizData.length) { showQuizResult(); return; }
+                quizAnswered = false;
+                const q = quizData[index];
+                quizQuestion.textContent = q.question;
+                updateQuizProgress();
+                quizOptions.innerHTML = '';
+                q.options.forEach((opt, i) => {
+                    const div = document.createElement('div');
+                    div.className = 'quiz-option';
+                    div.textContent = opt;
+                    div.dataset.index = i;
+                    div.setAttribute('role', 'button');
+                    div.setAttribute('tabindex', '0');
+                    div.addEventListener('click', optionClickHandler);
+                    div.addEventListener('keydown', (e) => { if(e.key === 'Enter') optionClickHandler(e); });
+                    quizOptions.appendChild(div);
+                });
+                quizFeedback.textContent = '';
+                quizNextBtn.style.display = 'none';
+                quizResult.style.display = 'none';
+                quizQuestion.style.display = 'block';
+                quizOptions.style.display = 'grid';
+            }
+
+            function optionClickHandler(e) {
+                if (quizAnswered) return;
+                quizAnswered = true;
+                const selectedDiv = e.target;
+                const selectedIndex = parseInt(selectedDiv.dataset.index);
+                const q = quizData[currentQuizIndex];
+                const isCorrect = selectedIndex === q.correct;
+
+                document.querySelectorAll('.quiz-option').forEach(opt => {
+                    opt.classList.add('disabled');
+                    const idx = parseInt(opt.dataset.index);
+                    if (idx === q.correct) opt.classList.add('correct');
+                    if (idx === selectedIndex && !isCorrect) opt.classList.add('wrong');
+                });
+
+                if (isCorrect) {
+                    score++;
+                    quizFeedback.innerHTML = '✅ <span style="color:#10b981">Correto! Muito bem!</span>';
+                } else {
+                    quizFeedback.innerHTML = '❌ <span style="color:#ef4444">Incorreto. A resposta certa está destacada em verde.</span>';
+                }
+                quizNextBtn.style.display = 'inline-block';
+                quizNextBtn.textContent = currentQuizIndex < quizData.length - 1 ? 'Próxima Pergunta' : 'Ver Resultado Final';
+                
+                // Atualiza barra para a próxima etapa visualmente
+                quizProgressFill.style.width = `${((currentQuizIndex + 1) / quizData.length) * 100}%`;
+            }
+
+            quizNextBtn.addEventListener('click', () => {
+                currentQuizIndex++;
+                loadQuizQuestion(currentQuizIndex);
+            });
+
+            function showQuizResult() {
+                quizProgressFill.style.width = '100%';
+                quizQuestion.style.display = 'none';
+                quizOptions.style.display = 'none';
+                quizFeedback.textContent = '';
+                quizNextBtn.style.display = 'none';
+                quizProgressText.textContent = 'Quiz Concluído!';
+                quizResult.style.display = 'block';
+                
+                const total = quizData.length;
+                const percentage = Math.round((score / total) * 100);
+                let message = percentage === 100 ? '🏆 Perfeito! Você é um especialista no Agrinho!' :
+                              percentage >= 80 ? '👏 Muito bom! Você conhece bem o programa.' :
+                              percentage >= 50 ? '📚 Dá para melhorar! Que tal estudar mais sobre o Agrinho?' :
+                              '🌱 Continue aprendendo! O Agrinho tem muito a ensinar.';
+                              
+                quizResult.innerHTML = `
+                    <h3 style="color:var(--accent); font-size:1.8rem; margin-bottom:10px;">Resultado Final</h3>
+                    <div class="quiz-score">${score} / ${total}</div>
+                    <p style="font-size:1.2rem; margin-bottom:30px; color: var(--subtext);">${message}</p>
+                    <button class="btn" id="restartQuiz">Tentar Novamente</button>
+                `;
+                document.getElementById('restartQuiz').addEventListener('click', () => {
+                    currentQuizIndex = 0; score = 0;
+                    quizResult.style.display = 'none';
+                    loadQuizQuestion(0);
+                });
+            }
+            loadQuizQuestion(0);
+
+            // ========== CONTADORES ANIMADOS ==========
+            const counters = document.querySelectorAll('.counter');
+            const counterObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const counter = entry.target;
+                        const target = +counter.dataset.target;
+                        const duration = 2000;
+                        const startTime = performance.now();
+
+                        function update(now) {
+                            const progress = Math.min((now - startTime) / duration, 1);
+                            // Efeito de easing
+                            const easeOut = 1 - Math.pow(1 - progress, 3);
+                            const currentVal = Math.floor(easeOut * target);
+                            counter.textContent = currentVal + (target === 2030 ? '' : '%');
+                            if (progress < 1) requestAnimationFrame(update);
+                            else counter.textContent = target + (target === 2030 ? '' : '%');
+                        }
+                        requestAnimationFrame(update);
+                        counterObserver.unobserve(counter);
+                    }
+                });
+            }, { threshold: 0.6 });
+            counters.forEach(c => counterObserver.observe(c));
+
+            // ========== ANIMAÇÃO FADE NO SCROLL ==========
+            const fadeElements = document.querySelectorAll('.fade');
+            const fadeObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('show');
+                        fadeObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.15 });
+            fadeElements.forEach(el => fadeObserver.observe(el));
+
+            // ========== EFEITO 3D TILT NOS CARDS ==========
+            document.querySelectorAll('.tilt-card').forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotateX = ((y - centerY) / centerY) * -8; // Inverte eixo Y para tilt natural
+                    const rotateY = ((x - centerX) / centerX) * 8;
+                    
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+                });
+            });
+
+            // ========== MOUSE GLOW EFFECT ==========
+            const mouseGlow = document.getElementById('mouseGlow');
+            document.addEventListener('mousemove', (e) => {
+                mouseGlow.style.left = e.clientX + 'px';
+                mouseGlow.style.top = e.clientY + 'px';
+            });
+
+            // ========== BOTÃO VOLTAR AO TOPO ==========
+            const backToTop = document.getElementById('backToTop');
+            window.addEventListener('scroll', () => {
+                backToTop.classList.toggle('visible', window.scrollY > 600);
+            }, { passive: true });
+            backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+            // ========== PARTÍCULAS ==========
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 25; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                const size = Math.random() * 6 + 2;
+                p.style.width = size + 'px';
+                p.style.height = size + 'px';
+                p.style.left = Math.random() * 100 + '%';
+                p.style.animationDelay = Math.random() * 8 + 's';
+                p.style.animationDuration = (Math.random() * 8 + 6) + 's';
+                particlesContainer.appendChild(p);
+            }
+
+            // ========== FORMULÁRIO COM FEEDBACK INLINE ==========
+            const contactForm = document.getElementById('contactForm');
+            const formContent = document.getElementById('formContent');
+            const formSuccess = document.getElementById('formSuccess');
+            
+            contactForm.addEventListener('submit', e => {
+                e.preventDefault();
+                // Simula envio
+                const btn = contactForm.querySelector('button[type="submit"]');
+                const originalText = btn.textContent;
+                btn.textContent = 'Enviando...';
+                btn.disabled = true;
+
+                setTimeout(() => {
+                    formContent.style.display = 'none';
+                    formSuccess.style.display = 'block';
+                    btn.textContent = originalText;
+                    btn.disabled = false;
+                    contactForm.reset();
+                }, 1200);
+            });
+
+            document.getElementById('resetFormBtn').addEventListener('click', () => {
+                formSuccess.style.display = 'none';
+                formContent.style.display = 'block';
+            });
+
+            console.log('🌾 AgroVision 2030 — Experiência interativa carregada com sucesso!');
+        })();
+    </script>
+</body>
+</html>
